@@ -1,7 +1,4 @@
-# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
-
-name: Flags
+name: Test
 
 on:
   push:
@@ -16,8 +13,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          distribution: ${{ env.JAVA_DIST }}
-          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin' # Replace with the desired distribution
+          java-version: '22'   # Replace with the specific version
           cache: 'maven'
       - name: Check Maven Version
         run: mvn -v
@@ -27,3 +24,18 @@ jobs:
           mvn -B verify -Djavafx.platform=linux
           jacoco:report
           -Pcoverage
+      - name: Get JaCoCo Coverage
+        id: coverage  
+        run: |
+          coverage=$(python3 config/coverage.py target/site/jacoco/jacoco.csv) 
+          echo "COVERAGE=$coverage" >> $GITHUB_ENV
+      - name: Fail if coverage has not improved.
+        run: |
+          coverage=$COVERAGE
+          threshold=13.43
+          if (( $(echo "$coverage - $threshold <= 0.1" | bc -l) )); then
+            echo "Coverage has not improved."
+            exit 1
+          else
+            echo "New coverage: $coverage%"
+          fi
