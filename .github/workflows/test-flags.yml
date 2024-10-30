@@ -23,7 +23,7 @@ jobs:
           # List different JVM flags here for testing purposes
           - "-XX:+UseSerialGC"
           - "-XX:+UseG1GC"
-          - "-XX:+UseG1GC"
+          - "-XX:+UseZGC"
           - "-Xms256m"
           - "-Xmx512m"
     steps:
