@@ -34,6 +34,8 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           cache: 'maven'
       - name: Build and Test
+        env:
+          JAVA_TOOL_OPTIONS: ${{ matrix.jvm_flag }}
         run: >
           xvfb-run
           mvn -B verify -Djavafx.platform=linux
