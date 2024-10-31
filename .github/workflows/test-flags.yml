@@ -20,12 +20,12 @@ jobs:
     strategy:
       matrix:
         jvm_flag:
-          # List different JVM flags here for testing purposes
-          - "-XX:+UseSerialGC"
-          - "-XX:+UseG1GC"
-          - "-XX:+UseZGC"
-          - "-Xms256m"
-          - "-Xmx512m"
+          # Different types of JVM flags
+          - "-XX:+UseSerialGC"            # Type GC
+          - "-Xms256m"                    # Mémoire minimale
+          - "-Xmx512m"                    # Mémoire maximale
+          - "-XX:+PrintCompilation"       # Log de compilation
+          - "-XX:+ShowCodeDetailsInExceptionMessages" # Afficher les détails dans les messages d'exception
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
